@@ -16,7 +16,9 @@
     "url": "https://github.com/hubot-scripts/hubot-belgiumrail/issues"
   },
   "dependencies": {
-    "coffee-script": "~1.6"
+    "coffee-script": "~1.6",
+    "moment": "^2.22.0",
+    "moment-timezone": "^0.5.14"
   },
   "devDependencies": {
     "mocha": "*",
