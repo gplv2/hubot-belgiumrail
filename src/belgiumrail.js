@@ -80,21 +80,25 @@ module.exports = function(robot) {
   robot.respond(/trains from (.+) to (.+)/i, function(msg) {
     let from = msg.match[1];
     let to = msg.match[2];
-    if (from.length === 0) { from = robot.brain.get('DEFAULT_STATION'); }
+    let user = msg.envelope.user.id;
+    if (from.length === 0) { from = robot.brain.get(user+'DEFAULT_STATION'); }
     return getTrainTimes(msg, from, to);
   });
 
   robot.respond(/set default train_station (.+)/i, function(msg) {
-    console.log(msg);
+    // console.log(msg);
     let station = msg.match[1];
+    let user = msg.envelope.user.id;
     if (station.length > 0) {
-        robot.brain.set('DEFAULT_STATION',station);
+        robot.brain.set(user+'DEFAULT_STATION',station);
     }
+    return msg.send(`default station set to: ${station}`);
   });
 
 
   return robot.respond(/trains to (.+)/i, function(msg) {
-    const fromCode = robot.brain.get('DEFAULT_STATION');
+    let user = msg.envelope.user.id;
+    const fromCode = robot.brain.get(user+'DEFAULT_STATION');
     let from = null;
     let to = msg.match[1];
     return getStation(msg, fromCode, function(station) {
