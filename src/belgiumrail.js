@@ -18,9 +18,11 @@
 // Author:
 //  Glenn Plas <glenn@bitles.be>
 //  https://api.irail.be/connections/?from=Weerde&to=Brussel-Schuman&format=json
+//
 
 
 module.exports = function(robot) {
+
   const getTrainTimes = (msg, from, to) =>
     robot.http("https://api.irail.be/connections/?").query({
       from: from,
@@ -42,6 +44,7 @@ module.exports = function(robot) {
               let response = `    ${connection.departure.station} to ${connection.arrival.station}`;
               if (connection.departure.platform.length) { response += ` at platform ${connection.departure.platform}`; }
               response += ` is at ${showtime(connection.departure.time)}`;
+              if (connection.departure.delay) { response += ` (+${connection.departure.delay})`; }
               msg.send(response);
             }
             result.push(i++);
@@ -102,6 +105,8 @@ module.exports = function(robot) {
  * @return String
  */
 function showtime(s) {
-   return new Date(s * 1e3).toISOString().slice(-13, -5);
+   var moment = require('moment-timezone');
+
+   return moment.unix(s).tz('CET').format('YYYY-MM-DD HH:mm:ss');
 }
 
