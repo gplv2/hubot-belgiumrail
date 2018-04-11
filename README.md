@@ -1,14 +1,13 @@
-# Hubot National Rail
+# Hubot Belgium Rail
 
-I wrote hubot-national-rail in response to nationalrail.coffee by @JaimeMagee.
-I wanted to be able to fuzzy-search by station, not by official station codes I
-could never remember.
+I wrote hubot-belgium-rail in response to the UK version of nationalrail.coffee by @JaimeMagee.
 
 ## Configuration
 
 You need to set the following:
 
- - `HUBOT_DEFAULT_STATION` set this to station code of your nearest station ([see here for codes](https://en.wikipedia.org/wiki/UK_railway_stations))
+ - `HUBOT_DEFAULT_STATION` set this to station code of your nearest station ([see here for codes](https://docs.irail.be/#stations))
+ - [irail stations](https://github.com/iRail/stations)
 
 ## Commands
 
