@@ -23,6 +23,7 @@
 
 
 module.exports = function(robot) {
+  var md5 = require('md5');
 
   const getTrainTimes = (msg, from, to) =>
     robot.http("https://api.irail.be/connections/?").query({
@@ -80,25 +81,25 @@ module.exports = function(robot) {
   robot.respond(/trains from (.+) to (.+)/i, function(msg) {
     let from = msg.match[1];
     let to = msg.match[2];
-    let user = msg.envelope.user.id;
-    if (from.length === 0) { from = robot.brain.get(user+'DEFAULT_STATION'); }
+    let user = md5(msg.envelope.user.id);
+    if (from.length === 0) { from = robot.brain.get(user+'_DEFAULT_STATION'); }
     return getTrainTimes(msg, from, to);
   });
 
   robot.respond(/set default train_station (.+)/i, function(msg) {
     // console.log(msg);
     let station = msg.match[1];
-    let user = msg.envelope.user.id;
+    let user = md5(msg.envelope.user.id);
     if (station.length > 0) {
-        robot.brain.set(user+'DEFAULT_STATION',station);
+        robot.brain.set(user+'_DEFAULT_STATION',station);
     }
     return msg.send(`default station set to: ${station}`);
   });
 
 
   return robot.respond(/trains to (.+)/i, function(msg) {
-    let user = msg.envelope.user.id;
-    const fromCode = robot.brain.get(user+'DEFAULT_STATION');
+    let user = md5(msg.envelope.user.id);
+    const fromCode = robot.brain.get(user+'_DEFAULT_STATION');
     let from = null;
     let to = msg.match[1];
     return getStation(msg, fromCode, function(station) {
