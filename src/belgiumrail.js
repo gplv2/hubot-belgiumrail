@@ -33,15 +33,15 @@ module.exports = function(robot) {
       const json = JSON.parse(body);
 	    console.log(json);
       if (json.connection.length) {
-        msg.send(`Next trains from: ${from} to ${to}:`);
+        msg.send(`Next train(s) from: ${from} to ${to}:`);
         let i = 0;
 
         return (() => {
           const result = [];
           while (i < json.connection.length) {
             const connection = json.connection[i];
-	    console.log(connection);
-            if (i < 5) {
+	        console.log(connection);
+            if (i < 4) {
               let response = `    ${connection.departure.station} to ${connection.arrival.station}`;
               if (connection.departure.platform.length) { response += ` at platform ${connection.departure.platform}`; }
               response += ` is at ${showtime(connection.departure.time)}`;
@@ -53,7 +53,7 @@ module.exports = function(robot) {
           return result;
         })();
       } else {
-        return msg.send("Sorry, there's no trains today");
+        return msg.send("Sorry, there's no train today");
       }
     })
   ;
@@ -85,6 +85,7 @@ module.exports = function(robot) {
   });
 
   robot.respond(/set default train_station (.+)/i, function(msg) {
+    console.log(msg);
     let station = msg.match[1];
     if (station.length > 0) {
         robot.brain.set('DEFAULT_STATION',station);
