@@ -1,0 +1,29 @@
+{
+  "name": "hubot-belgiumrail",
+  "description": "Get Belgium Rail live departure information using iRail",
+  "version": "0.0.2",
+  "author": "Glenn Plas <glenn@bitless.be>",
+  "license": "MIT",
+  "keywords": [
+    "hubot",
+    "hubot-scripts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:gplv2/hubot-belgiumrail.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hubot-scripts/hubot-belgiumrail/issues"
+  },
+  "dependencies": {
+    "coffee-script": "~1.6"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "sinon-chai": "*",
+    "sinon": "*"
+  },
+  "main": "index.coffee",
+  "scripts": {}
+}
