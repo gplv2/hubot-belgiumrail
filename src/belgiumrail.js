@@ -10,6 +10,7 @@
 // Commands:
 //   hubot: trains from <departure station> to <arrival station> - Get trains from one station to another
 //   hubot: trains to <arrival station> - Get trains from the default station to another
+//   hubot: set default train_station <default station>
 //
 // Notes:
 //   Inspired by the work of JamieMagee and John Hamelink
@@ -79,12 +80,20 @@ module.exports = function(robot) {
   robot.respond(/trains from (.+) to (.+)/i, function(msg) {
     let from = msg.match[1];
     let to = msg.match[2];
-    if (from.length === 0) { from = process.env.HUBOT_DEFAULT_STATION; }
+    if (from.length === 0) { from = robot.brain.get('DEFAULT_STATION'); }
     return getTrainTimes(msg, from, to);
   });
 
+  robot.respond(/set default train_station (.+)/i, function(msg) {
+    let station = msg.match[1];
+    if (station.length > 0) {
+        robot.brain.set('DEFAULT_STATION',station);
+    }
+  });
+
+
   return robot.respond(/trains to (.+)/i, function(msg) {
-    const fromCode = process.env.HUBOT_DEFAULT_STATION;
+    const fromCode = robot.brain.get('DEFAULT_STATION');
     let from = null;
     let to = msg.match[1];
     return getStation(msg, fromCode, function(station) {
