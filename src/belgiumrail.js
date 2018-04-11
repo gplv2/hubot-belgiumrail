@@ -17,28 +17,31 @@
 //
 // Author:
 //  Glenn Plas <glenn@bitles.be>
+//  https://api.irail.be/connections/?from=Weerde&to=Brussel-Schuman&format=json
 
 
 module.exports = function(robot) {
   const getTrainTimes = (msg, from, to) =>
-    robot.http("https://api.irail.be/connections/").query({
-      from: from.code,
-      to: to.code,
+    robot.http("https://api.irail.be/connections/?").query({
+      from: from,
+      to: to,
       format: 'json'
     }).get()(function(err, res, body) {
       const json = JSON.parse(body);
+	    console.log(json);
       if (json.connection.length) {
-        msg.send(`Next trains from: ${from.name} to ${to.name}:`);
+        msg.send(`Next trains from: ${from} to ${to}:`);
         let i = 0;
 
         return (() => {
           const result = [];
           while (i < json.connection.length) {
-            const station = json.trains[i];
+            const connection = json.connection[i];
+	    console.log(connection);
             if (i < 5) {
-              let response = `The ${station[1]} to ${station[2]}`;
-              if (station[4].length) { response += ` at platform ${station[4]}`; }
-              response += ` is ${/[^;]*$/.exec(station[3])[0].trim().toLowerCase()}`;
+              let response = `    ${connection.departure.station} to ${connection.arrival.station}`;
+              if (connection.departure.platform.length) { response += ` at platform ${connection.departure.platform}`; }
+              response += ` is at ${showtime(connection.departure.time)}`;
               msg.send(response);
             }
             result.push(i++);
@@ -52,7 +55,10 @@ module.exports = function(robot) {
   ;
 
   const getStation = (msg, query, callback) =>
-    robot.http('http://irail.be/stations/NMBS/${encodeURIComponent(query)}').get()(function(err, res, body) {
+    robot.http('http://irail.be/stations/NMBS/${encodeURIComponent(query)}').query({
+      format: 'json'
+    }).get()(function(err, res, body) {
+      console.log(body);
       const json = JSON.parse(body);
       if (json.length) {
         const station = {
@@ -71,13 +77,7 @@ module.exports = function(robot) {
     let from = msg.match[1];
     let to = msg.match[2];
     if (from.length === 0) { from = process.env.HUBOT_DEFAULT_STATION; }
-    return getStation(msg, from, function(station) {
-      from = station;
-      return getStation(msg, to, function(station) {
-        to = station;
-        return getTrainTimes(msg, from, to);
-      });
-    });
+    return getTrainTimes(msg, from, to);
   });
 
   return robot.respond(/trains to (.+)/i, function(msg) {
@@ -93,3 +93,15 @@ module.exports = function(robot) {
     });
   });
 };
+
+/**
+ * Convert seconds to time string (hh:mm:ss).
+ *
+ * @param Number s
+ *
+ * @return String
+ */
+function showtime(s) {
+   return new Date(s * 1e3).toISOString().slice(-13, -5);
+}
+
