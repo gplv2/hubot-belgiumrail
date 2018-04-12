@@ -1,3 +1,5 @@
+/*jslint node: true */
+
 // Description:
 //   Get National Rail live departure information
 //
@@ -8,18 +10,21 @@
 //   HUBOT_DEFAULT_STATION - set the default from station (nearest to your home/office)
 //
 // Commands:
-//   hubot: trains from <departure station> to <arrival station> - Get trains from one station to another
-//   hubot: trains to <arrival station> - Get trains from the default station to another
-//   hubot: set default train_station <default station>
+//  HUBOT trains from <departure station> to <arrival station> - Get trains from one station to another
+//  HUBOT trains to <arrival station> - Get trains from the default station to another
+//  HUBOT set default train_station <default station> - saves default station to the brain
+//  HUBOT get default train_station <default station> - shows the default station to the brain
 //
 // Notes:
 //   Inspired by the work of JamieMagee and John Hamelink
-//   For Belgium railway
+//   reworked for Belgium railway using iRail API
 //
 // Author:
 //  Glenn Plas <glenn@bitles.be>
 //  https://api.irail.be/connections/?from=Weerde&to=Brussel-Schuman&format=json
 //
+//
+'use strict';
 
 
 module.exports = function(robot) {
@@ -44,9 +49,15 @@ module.exports = function(robot) {
 	        console.log(connection);
             if (i < 4) {
               let response = `    ${connection.departure.station} to ${connection.arrival.station}`;
-              if (connection.departure.platform.length) { response += ` at platform ${connection.departure.platform}`; }
+              if (connection.departure.platform.length) {
+                response += ` at platform ${connection.departure.platform}`;
+                }
               response += ` is at ${showtime(connection.departure.time)}`;
-              if (connection.departure.delay) { response += ` (+${connection.departure.delay})`; }
+              if (connection.departure.delay>0) {
+                response += ` <b>(+${connection.departure.delay})</b>`;
+              } else {
+                response += ` (<font color="green">On Time</font>)`;
+              }
               msg.send(response);
             }
             result.push(i++);
@@ -94,6 +105,15 @@ module.exports = function(robot) {
         robot.brain.set(user+'_DEFAULT_STATION',station);
     }
     return msg.send(`default station set to: ${station}`);
+  });
+
+  robot.respond(/get default train_station/i, function(msg) {
+    let user = md5(msg.envelope.user.id);
+    let station = 'NULL';
+    if (user.length > 0) {
+        station = robot.brain.get(user+'_DEFAULT_STATION');
+    }
+    return msg.send(`default station is : ${station}`);
   });
 
 
