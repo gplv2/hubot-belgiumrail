@@ -4,6 +4,11 @@ A simple client for the API exposed by [iRail.be](https://irail.be/)
 
 I wrote hubot-belgium-rail in response to the fact that iRail made a decent API which made it fun and worth implementing
 
+You can see it live in action at the BE-OSM chat channel on riot https://riot.im/app/#/register and visit #osmbe:matrix.org room
+
+![Example from matrix](/screenshots/screenshot1.png)
+
+
 ## Installation
 
 You can install this hubot as an external script directly using npm:
