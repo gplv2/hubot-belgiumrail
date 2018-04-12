@@ -113,9 +113,8 @@ module.exports = function(robot) {
     if (user.length > 0) {
         station = robot.brain.get(user+'_DEFAULT_STATION');
     }
-    return msg.send(`default station is : ${station}`);
+    return msg.send(`current default station is : ${station}`);
   });
-
 
   return robot.respond(/trains to (.+)/i, function(msg) {
     let user = md5(msg.envelope.user.id);
