@@ -64,6 +64,10 @@ module.exports = function(robot) {
               } else {
                 response += ` (On Time)`;
               }
+            
+              var duration=Math.round(connection.duration/60);
+              response += ` (Travel time: ${duration}m)`;
+
               msg.send(response);
             }
             result.push(i++);
@@ -72,25 +76,6 @@ module.exports = function(robot) {
         })();
       } else {
         return msg.send("Sorry, there's no train today");
-      }
-    })
-  ;
-
-  const getStation = (msg, query, callback) =>
-    robot.http('http://irail.be/stations/NMBS/${encodeURIComponent(query)}').query({
-      format: 'json'
-    }).get()(function(err, res, body) {
-      console.log(body);
-      const json = JSON.parse(body);
-      if (json.length) {
-        const station = {
-          code: json[0][0],
-          name: json[0][1]
-        };
-
-        return callback(station);
-      } else {
-        return msg.send(`Couldn't find station: ${query}`);
       }
     })
   ;
@@ -128,6 +113,24 @@ module.exports = function(robot) {
     let to = msg.match[1];
     return getTrainTimes(msg, from, to);
   });
+
+  const getStation = (msg, query, callback) =>
+    robot.http('http://irail.be/stations/NMBS/${encodeURIComponent(query)}').query({
+      format: 'json'
+    }).get()(function(err, res, body) {
+      console.log(body);
+      const json = JSON.parse(body);
+      if (json.length) {
+        const station = {
+          code: json[0][0],
+          name: json[0][1]
+        };
+
+        return callback(station);
+      } else {
+        return msg.send(`Couldn't find station: ${query}`);
+      }
+    });
 };
 
 /**
