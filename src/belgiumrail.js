@@ -65,8 +65,10 @@ module.exports = function(robot) {
                 response += ` (On Time)`;
               }
             
-              var duration=Math.round(connection.duration/60);
-              response += ` (Travel time: ${duration}m)`;
+              var date = new Date(null);
+              date.setSeconds(connection.duration); 
+              var duration=date.toISOString().substr(11, 8);
+              response += ` (Travel time: ${duration})`;
 
               msg.send(response);
             }
