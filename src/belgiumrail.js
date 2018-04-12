@@ -1,19 +1,21 @@
 /*jslint node: true */
 
 // Description:
-//   Get National Rail live departure information
+//  Get Belgian Rail live information
 //
 // Dependencies:
-//   None
+//  Api access to iRail:
+//  https://api.irail.be/connections/?from=Weerde&to=Brussel-Schuman&format=json
 //
 // Configuration:
-//   HUBOT_DEFAULT_STATION - set the default from station (nearest to your home/office)
+//  HUBOT_DEFAULT_STATION - set the default from station (nearest to your home/office)
 //
 // Commands:
-//  HUBOT trains from <departure station> to <arrival station> - Get trains from one station to another
-//  HUBOT trains to <arrival station> - Get trains from the default station to another
-//  HUBOT set default train_station <default station> - saves default station to the brain
-//  HUBOT get default train_station <default station> - shows the default station to the brain
+//  HUBOT trains from <departure station> to <arrival station>` - Show the next trains from one station to the other
+//  HUBOT trains to <arrival station>` - Show the next trains from the default station to the arrival station
+//  HUBOT trains to <arrival station>` - Show the next trains from the default station to the arrival station
+//  HUBOT set default train_station <station>` - Set the default station and save it to the brain
+//  HUBOT get default train_station            - Get the default station from the brain
 //
 // Notes:
 //   Inspired by the work of JamieMagee and John Hamelink
@@ -21,9 +23,7 @@
 //
 // Author:
 //  Glenn Plas <glenn@bitles.be>
-//  https://api.irail.be/connections/?from=Weerde&to=Brussel-Schuman&format=json
-//
-//
+
 'use strict';
 
 
@@ -124,16 +124,9 @@ module.exports = function(robot) {
 
   return robot.respond(/trains to (.+)/i, function(msg) {
     let user = md5(msg.envelope.user.id);
-    const fromCode = robot.brain.get(user+'_DEFAULT_STATION');
-    let from = null;
+    const from = robot.brain.get(user+'_DEFAULT_STATION');
     let to = msg.match[1];
-    return getStation(msg, fromCode, function(station) {
-      from = station;
-      return getStation(msg, to, function(station) {
-        to = station;
-        return getTrainTimes(msg, from, to);
-      });
-    });
+    return getTrainTimes(msg, from, to);
   });
 };
 
