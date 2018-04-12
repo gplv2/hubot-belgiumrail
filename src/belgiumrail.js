@@ -68,7 +68,7 @@ module.exports = function(robot) {
               var date = new Date(null);
               date.setSeconds(connection.duration); 
               var duration=date.toISOString().substr(11, 8);
-              response += ` (Travel time: ${duration})`;
+              response += ` = Travel time: ${duration}`;
 
               msg.send(response);
             }
