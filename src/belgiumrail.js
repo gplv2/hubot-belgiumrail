@@ -48,15 +48,21 @@ module.exports = function(robot) {
             const connection = json.connection[i];
 	        console.log(connection);
             if (i < 4) {
-              let response = `    ${connection.departure.station} to ${connection.arrival.station}`;
+              let response = `   [ ${connection.departure.vehicle.split(".")[2].trim().toUpperCase()} ] ${connection.departure.station} to ${connection.arrival.station}`;
               if (connection.departure.platform.length) {
                 response += ` at platform ${connection.departure.platform}`;
                 }
               response += ` is at ${showtime(connection.departure.time)}`;
               if (connection.departure.delay>0) {
-                response += ` <b>(+${connection.departure.delay})</b>`;
+                  var delay=connection.departure.delay;
+                  if (delay > 60 ) {
+                    delay=Math.round(delay/60);
+                    response += ` (+${delay}m)`;
+                  } else {
+                    response += ` (+${delay}s)`;
+                  }
               } else {
-                response += ` (<font color="green">On Time</font>)`;
+                response += ` (On Time)`;
               }
               msg.send(response);
             }
