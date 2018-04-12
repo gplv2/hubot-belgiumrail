@@ -11,7 +11,7 @@ You can see it live in action at the BE-OSM chat channel on riot https://riot.im
 
 ## Installation
 
-You can install this hubot as an external script directly using npm:
+You can install this in hubot as an external script directly using npm:
 
  - npm install https://github.com/gplv2/hubot-belgiumrail.git
 
