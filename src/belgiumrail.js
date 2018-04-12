@@ -11,7 +11,6 @@
 // Commands:
 //  hubot trains from <departure station> to <arrival station>` - Show the next trains from one station to the other
 //  hubot trains to <arrival station>` - Show the next trains from the default station to the arrival station
-//  hubot trains to <arrival station>` - Show the next trains from the default station to the arrival station
 //  hubot set default train_station <station>` - Set the default station and save it to the brain
 //  hubot get default train_station            - Get the default station from the brain
 //
@@ -51,8 +50,7 @@ module.exports = function(robot) {
               if (connection.departure.platform.length) {
                 response += ` at platform ${connection.departure.platform}`;
               }
-              var departure = moment(connection.departure.time).tz('CET').format('HH:mm:ss');
-              response += ` departs ${showtime(departure)}`;
+              response += ` departs on ${showtime(connection.departure.time)}`;
               // delay
               if (connection.departure.delay>0) {
                   var delay=connection.departure.delay;
@@ -69,19 +67,20 @@ module.exports = function(robot) {
               var date = new Date(null);
               date.setSeconds(connection.duration); 
               var duration=date.toISOString().substr(11, 8);
-              response += ` = Travel time: ${duration}`;
+
+              response += ` [ Travel time: ${duration}`;
 
               // Check to see if we have a direct connection or not by counting the vias
               if (connection.vias) {
                   var vias = connection.vias.number;
                   //console.log('total: '+vias);
                 if (vias>0) {
-                    response += ` ( ${vias} Ch )`;
+                    response += ` (${vias} Ch) ]`;
                 } else {
-                    response += ` ( D )`;
+                    response += ` (D) ]`;
                 }
               } else {
-                response += ` ( D )`;
+                response += ` (D) ]`;
               }
 
               msg.send(response);
@@ -159,6 +158,7 @@ module.exports = function(robot) {
 function showtime(s) {
    var moment = require('moment-timezone');
 
-   return moment.unix(s).tz('CET').format('YYYY-MM-DD HH:mm:ss');
+    //var departure = moment.unix(connection.departure.time).tz('CET').format('HH:mm:ss');
+   return moment.unix(s).tz('CET').format('HH:mm:ss');
 }
 
