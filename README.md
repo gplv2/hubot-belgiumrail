@@ -34,4 +34,4 @@ You may want to set the following:
  - `HUBOT trains to <arrival station>` - Show the next trains from the default station to the arrival station
  - `HUBOT trains to <arrival station>` - Show the next trains from the default station to the arrival station
  - `HUBOT set default train_station <station>` - Set the default station and save it to the brain
- - `HUBOT get default train_station            - Get the default station from the brain
+ - `HUBOT get default train_station`           - Get the default station from the brain
