@@ -1,5 +1,3 @@
-/*jslint node: true */
-
 // Description:
 //  Get Belgian Rail live information
 //
@@ -11,11 +9,11 @@
 //  HUBOT_DEFAULT_STATION - set the default from station (nearest to your home/office)
 //
 // Commands:
-//  HUBOT trains from <departure station> to <arrival station>` - Show the next trains from one station to the other
-//  HUBOT trains to <arrival station>` - Show the next trains from the default station to the arrival station
-//  HUBOT trains to <arrival station>` - Show the next trains from the default station to the arrival station
-//  HUBOT set default train_station <station>` - Set the default station and save it to the brain
-//  HUBOT get default train_station            - Get the default station from the brain
+//  hubot trains from <departure station> to <arrival station>` - Show the next trains from one station to the other
+//  hubot trains to <arrival station>` - Show the next trains from the default station to the arrival station
+//  hubot trains to <arrival station>` - Show the next trains from the default station to the arrival station
+//  hubot set default train_station <station>` - Set the default station and save it to the brain
+//  hubot get default train_station            - Get the default station from the brain
 //
 // Notes:
 //   Inspired by the work of JamieMagee and John Hamelink
@@ -24,8 +22,8 @@
 // Author:
 //  Glenn Plas <glenn@bitles.be>
 
+/*jslint node: true */
 'use strict';
-
 
 module.exports = function(robot) {
   var md5 = require('md5');
