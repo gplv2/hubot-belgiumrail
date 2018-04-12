@@ -37,7 +37,7 @@ module.exports = function(robot) {
       format: 'json'
     }).get()(function(err, res, body) {
       const json = JSON.parse(body);
-	    console.log(json);
+	    //console.log(json);
       if (json.connection.length) {
         msg.send(`Next train(s) from: ${from} to ${to}:`);
         let i = 0;
@@ -46,7 +46,7 @@ module.exports = function(robot) {
           const result = [];
           while (i < json.connection.length) {
             const connection = json.connection[i];
-	        console.log(connection);
+	        //console.log(connection);
             if (i < 4) {
               let response = `   [ ${connection.departure.vehicle.split(".")[2].trim().toUpperCase()} ] ${connection.departure.station} to ${connection.arrival.station}`;
               if (connection.departure.platform.length) {
@@ -69,6 +69,15 @@ module.exports = function(robot) {
               date.setSeconds(connection.duration); 
               var duration=date.toISOString().substr(11, 8);
               response += ` = Travel time: ${duration}`;
+
+              // Check to see if we have a direct connection or not by counting the vias
+              var vias = connection.departure.vias.via.length;
+              //console.log('total: '+vias);
+              if (vias>0) {
+                response += ` ( ${vias} transfers )`;
+              } else {
+                response += `  ( Direct )`;
+              }
 
               msg.send(response);
             }
@@ -120,7 +129,7 @@ module.exports = function(robot) {
     robot.http('http://irail.be/stations/NMBS/${encodeURIComponent(query)}').query({
       format: 'json'
     }).get()(function(err, res, body) {
-      console.log(body);
+      //console.log(body);
       const json = JSON.parse(body);
       if (json.length) {
         const station = {
