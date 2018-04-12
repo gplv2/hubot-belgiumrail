@@ -71,10 +71,14 @@ module.exports = function(robot) {
               response += ` = Travel time: ${duration}`;
 
               // Check to see if we have a direct connection or not by counting the vias
-              var vias = connection.departure.vias.via.length;
-              //console.log('total: '+vias);
-              if (vias>0) {
-                response += ` ( ${vias} transfers )`;
+              if (connection.departure.vias) {
+                  var vias = connection.departure.vias.via.length;
+                  //console.log('total: '+vias);
+                if (vias>0) {
+                    response += ` ( ${vias} transfers )`;
+                } else {
+                    response += `  ( Direct )`;
+                }
               } else {
                 response += `  ( Direct )`;
               }
