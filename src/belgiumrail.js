@@ -29,6 +29,7 @@
 
 module.exports = function(robot) {
   var md5 = require('md5');
+  var moment = require('moment-timezone');
 
   const getTrainTimes = (msg, from, to) =>
     robot.http("https://api.irail.be/connections/?").query({
@@ -51,8 +52,10 @@ module.exports = function(robot) {
               let response = `   [ ${connection.departure.vehicle.split(".")[2].trim().toUpperCase()} ] ${connection.departure.station} to ${connection.arrival.station}`;
               if (connection.departure.platform.length) {
                 response += ` at platform ${connection.departure.platform}`;
-                }
-              response += ` is at ${showtime(connection.departure.time)}`;
+              }
+              var departure = moment(connection.departure.time).tz('CET').format('HH:mm:ss');
+              response += ` departs ${showtime(departure)}`;
+              // delay
               if (connection.departure.delay>0) {
                   var delay=connection.departure.delay;
                   if (delay > 60 ) {
