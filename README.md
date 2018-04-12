@@ -23,7 +23,7 @@ And then add this to `external-scripts.json` array :
 
 You may want to set the following:
 
- - HUBOT set default train_station <station> set this to station code of your nearest station ([get list of station names here](https://docs.irail.be/#stations)) (API call)
+ - `HUBOT set default train_station <station>` set this to station code of your nearest station ([get list of station names here](https://docs.irail.be/#stations)) (API call)
 
 ## More information
  - [irail stations](https://github.com/iRail/stations)
